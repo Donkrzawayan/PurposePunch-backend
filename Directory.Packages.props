@@ -2,7 +2,6 @@
   <PropertyGroup>
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
     <PostgreSQLPackageVersion>9.0.4</PostgreSQLPackageVersion>
-    <MicrosoftPackageVersion>10.0.0</MicrosoftPackageVersion>
   </PropertyGroup>
 
   <ItemGroup Label="Infrastructure">
@@ -13,6 +12,6 @@
 
   <ItemGroup Label="Api">
     <PackageVersion Include="Microsoft.EntityFrameworkCore.Design" Version="$(PostgreSQLPackageVersion)" />
-    <PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="$(MicrosoftPackageVersion)" />
+	<PackageVersion Include="Swashbuckle.AspNetCore" Version="6.6.2" />
   </ItemGroup>
 </Project>

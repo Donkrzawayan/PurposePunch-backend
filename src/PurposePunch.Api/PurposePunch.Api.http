@@ -1,6 +1,12 @@
-@PurposePunch.Api_HostAddress = http://localhost:5100
-
-GET {{PurposePunch.Api_HostAddress}}/weatherforecast/
-Accept: application/json
+@Api_HostAddress = http://localhost:5100
 
 ###
+GET {{Api_HostAddress}}/api/decisions/
+
+###
+POST {{Api_HostAddress}}/api/decisions/?name=X&description=Y
+# Content-Type: application/json
+# {
+#   "name": "New Decision",
+#   "description": "Description of the new decision"
+# }

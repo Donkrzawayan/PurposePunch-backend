@@ -1,4 +1,7 @@
 <Solution>
+  <Folder Name="/Config/">
+    <File Path="Directory.Packages.props" />
+  </Folder>
   <Folder Name="/src/">
     <Project Path="src/PurposePunch.Api/PurposePunch.Api.csproj" />
     <Project Path="src/PurposePunch.Application/PurposePunch.Application.csproj" />
