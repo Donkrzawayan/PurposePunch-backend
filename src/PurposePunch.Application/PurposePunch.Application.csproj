@@ -1,0 +1,7 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\PurposePunch.Domain\PurposePunch.Domain.csproj" />
+  </ItemGroup>
+
+</Project>

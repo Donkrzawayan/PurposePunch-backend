@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/PurposePunch.Api/PurposePunch.Api.csproj" />
+    <Project Path="src/PurposePunch.Application/PurposePunch.Application.csproj" />
+    <Project Path="src/PurposePunch.Domain/PurposePunch.Domain.csproj" />
+    <Project Path="src/PurposePunch.Infrastructure/PurposePunch.Infrastructure.csproj" />
+  </Folder>
+</Solution>
