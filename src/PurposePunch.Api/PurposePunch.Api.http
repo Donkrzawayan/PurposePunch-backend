@@ -4,9 +4,13 @@
 GET {{Api_HostAddress}}/api/decisions/
 
 ###
-POST {{Api_HostAddress}}/api/decisions/?name=X&description=Y
-# Content-Type: application/json
-# {
-#   "name": "New Decision",
-#   "description": "Description of the new decision"
-# }
+GET {{Api_HostAddress}}/api/decisions/1
+
+###
+POST {{Api_HostAddress}}/api/decisions/
+Content-Type: application/json
+
+{
+  "title": "New Decision",
+  "description": "Description of the new decision"
+}

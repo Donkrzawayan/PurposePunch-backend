@@ -1,17 +1,20 @@
 <Project>
-  <PropertyGroup>
-    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
-    <PostgreSQLPackageVersion>9.0.4</PostgreSQLPackageVersion>
-  </PropertyGroup>
+	<PropertyGroup>
+		<ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+		<PostgreSQLPackageVersion>9.0.4</PostgreSQLPackageVersion>
+	</PropertyGroup>
 
-  <ItemGroup Label="Infrastructure">
-    <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="$(PostgreSQLPackageVersion)" />
-    <PackageVersion Include="Microsoft.EntityFrameworkCore.Tools" Version="$(PostgreSQLPackageVersion)" />
-    
-  </ItemGroup>
+	<ItemGroup Label="Infrastructure">
+		<PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="$(PostgreSQLPackageVersion)" />
+		<PackageVersion Include="Microsoft.EntityFrameworkCore.Tools" Version="$(PostgreSQLPackageVersion)" />
+	</ItemGroup>
 
-  <ItemGroup Label="Api">
-    <PackageVersion Include="Microsoft.EntityFrameworkCore.Design" Version="$(PostgreSQLPackageVersion)" />
-	<PackageVersion Include="Swashbuckle.AspNetCore" Version="6.6.2" />
-  </ItemGroup>
+	<ItemGroup Label="Application">
+		<PackageVersion Include="MediatR" Version="12.5.0" />
+	</ItemGroup>
+
+	<ItemGroup Label="Api">
+		<PackageVersion Include="Microsoft.EntityFrameworkCore.Design" Version="$(PostgreSQLPackageVersion)" />
+		<PackageVersion Include="Swashbuckle.AspNetCore" Version="6.6.2" />
+	</ItemGroup>
 </Project>

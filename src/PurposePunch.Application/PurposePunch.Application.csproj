@@ -4,4 +4,8 @@
     <ProjectReference Include="..\PurposePunch.Domain\PurposePunch.Domain.csproj" />
   </ItemGroup>
 
+	<ItemGroup>
+		<PackageReference Include="MediatR" />
+	</ItemGroup>
+
 </Project>

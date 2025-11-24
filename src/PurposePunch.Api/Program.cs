@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using PurposePunch.Application;
 using PurposePunch.Application.Interfaces;
 using PurposePunch.Infrastructure.Persistence;
 using PurposePunch.Infrastructure.Repositories;
@@ -6,7 +7,7 @@ using PurposePunch.Infrastructure.Repositories;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
+builder.Services.AddApplication();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

@@ -1,5 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using PurposePunch.Application.Interfaces;
+﻿using MediatR;
+using Microsoft.AspNetCore.Mvc;
+using PurposePunch.Application.Features.Decisions;
 using PurposePunch.Domain.Entities;
 
 namespace PurposePunch.Api.Controllers;
@@ -8,37 +9,37 @@ namespace PurposePunch.Api.Controllers;
 [ApiController]
 public class DecisionsController : ControllerBase
 {
-    private readonly IDecisionRepository _repository;
+    private readonly IMediator _mediator;
 
-    public DecisionsController(IDecisionRepository repository)
+    public DecisionsController(IMediator mediator)
     {
-        _repository = repository;
+        _mediator = mediator;
     }
 
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById(int id)
     {
-        var decision = await _repository.GetByIdAsync(id);
-        return decision == null ? NotFound() : Ok(decision);
+        var query = new GetDecisionByIdQuery(id);
+        var decision = await _mediator.Send(query);
+
+        if (decision == null)
+            return NotFound();
+
+        return Ok(decision);
     }
 
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
-        var decisions = await _repository.GetAllAsync();
+        var query = new GetAllDecisionsQuery();
+        var decisions = await _mediator.Send(query);
         return Ok(decisions);
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create(string title, string description)
+    public async Task<IActionResult> Create([FromBody] CreateDecisionCommand command)
     {
-        var decision = new Decision
-        {
-            Title = title,
-            Description = description
-        };
-
-        Decision? addedDecision = await _repository.CreateAsync(decision);
+        Decision? addedDecision = await _mediator.Send(command);
         if (addedDecision == null)
             return BadRequest("Could not create decision.");
         return CreatedAtAction(nameof(GetById), new { id = addedDecision.Id }, addedDecision);
