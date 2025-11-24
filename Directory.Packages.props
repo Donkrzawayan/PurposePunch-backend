@@ -11,6 +11,7 @@
 
 	<ItemGroup Label="Application">
 		<PackageVersion Include="MediatR" Version="12.5.0" />
+		<PackageVersion Include="FluentValidation.DependencyInjectionExtensions" Version="12.1.0" />
 	</ItemGroup>
 
 	<ItemGroup Label="Api">
