@@ -23,19 +23,28 @@ public class CreateDecisionValidator : AbstractValidator<CreateDecisionCommand>
 public class CreateDecisionHandler : IRequestHandler<CreateDecisionCommand, Decision>
 {
     private readonly IDecisionRepository _repo;
+    private readonly ICurrentUserService _currentUserService;
 
-    public CreateDecisionHandler(IDecisionRepository repo) => _repo = repo;
+    public CreateDecisionHandler(IDecisionRepository repo, ICurrentUserService currentUserService)
+    {
+        _repo = repo;
+        _currentUserService = currentUserService;
+    }
 
     public async Task<Decision> Handle(CreateDecisionCommand cmd, CancellationToken ct)
     {
+        var userId = _currentUserService.UserId;
+
+        if (string.IsNullOrEmpty(userId))
+            throw new UnauthorizedAccessException("User is not logged in.");
+
         var decision = new Decision
         {
             Title = cmd.Title,
             Description = cmd.Description,
-            UserId = "temp-user-id"
+            UserId = userId
         };
 
-        await _repo.CreateAsync(decision);
-        return decision;
+        return await _repo.CreateAsync(decision);
     }
 }
