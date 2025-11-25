@@ -1,12 +1,13 @@
 <Project>
 	<PropertyGroup>
 		<ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
-		<PostgreSQLPackageVersion>9.0.4</PostgreSQLPackageVersion>
+		<MicrosoftPackageVersion>10.0.0</MicrosoftPackageVersion>
 	</PropertyGroup>
 
-	<ItemGroup Label="Infrastructure">
-		<PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="$(PostgreSQLPackageVersion)" />
-		<PackageVersion Include="Microsoft.EntityFrameworkCore.Tools" Version="$(PostgreSQLPackageVersion)" />
+	<ItemGroup Label="For PostgreSQL">
+		<PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="$(MicrosoftPackageVersion)" />
+		<PackageVersion Include="Microsoft.EntityFrameworkCore.Tools" Version="$(MicrosoftPackageVersion)" />
+		<PackageVersion Include="Microsoft.EntityFrameworkCore.Design" Version="$(MicrosoftPackageVersion)" />
 	</ItemGroup>
 
 	<ItemGroup Label="Application">
@@ -15,7 +16,13 @@
 	</ItemGroup>
 
 	<ItemGroup Label="Api">
-		<PackageVersion Include="Microsoft.EntityFrameworkCore.Design" Version="$(PostgreSQLPackageVersion)" />
 		<PackageVersion Include="Swashbuckle.AspNetCore" Version="6.6.2" />
+	</ItemGroup>
+
+	<ItemGroup Label="For Identity and JWT">
+		<PackageVersion Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="$(MicrosoftPackageVersion)" />
+		<PackageVersion Include="Microsoft.Extensions.Identity.Stores" Version="$(MicrosoftPackageVersion)" />
+
+		<PackageVersion Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="$(MicrosoftPackageVersion)" />
 	</ItemGroup>
 </Project>

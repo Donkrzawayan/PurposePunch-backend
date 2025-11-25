@@ -31,7 +31,8 @@ public class CreateDecisionHandler : IRequestHandler<CreateDecisionCommand, Deci
         var decision = new Decision
         {
             Title = cmd.Title,
-            Description = cmd.Description
+            Description = cmd.Description,
+            UserId = "temp-user-id"
         };
 
         await _repo.CreateAsync(decision);

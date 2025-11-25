@@ -8,5 +8,6 @@ public class Decision
     public string ExpectedOutcome { get; set; } = string.Empty;
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public DateTime ExpectedAt { get; set; } = DateTime.UtcNow.AddDays(30);
+    public required string UserId { get; set; }
 }
 

@@ -1,7 +1,9 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using PurposePunch.Api.Infrastructure;
 using PurposePunch.Application;
 using PurposePunch.Application.Interfaces;
+using PurposePunch.Infrastructure.Identity;
 using PurposePunch.Infrastructure.Persistence;
 using PurposePunch.Infrastructure.Repositories;
 
@@ -22,6 +24,11 @@ builder.Services.AddDbContext<AppDbContext>(options =>
         b => b.MigrationsAssembly("PurposePunch.Infrastructure")
     ));
 
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
+    .AddEntityFrameworkStores<AppDbContext>()
+    .AddDefaultTokenProviders();
+builder.Services.AddAuthentication();
+
 builder.Services.AddScoped<IDecisionRepository, DecisionRepository>();
 
 var app = builder.Build();
@@ -37,6 +44,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
