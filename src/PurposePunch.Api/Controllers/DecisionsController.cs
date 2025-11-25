@@ -39,9 +39,7 @@ public class DecisionsController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] CreateDecisionCommand command)
     {
-        Decision? addedDecision = await _mediator.Send(command);
-        if (addedDecision == null)
-            return BadRequest("Could not create decision.");
+        var addedDecision = await _mediator.Send(command);
         return CreatedAtAction(nameof(GetById), new { id = addedDecision.Id }, addedDecision);
     }
 }

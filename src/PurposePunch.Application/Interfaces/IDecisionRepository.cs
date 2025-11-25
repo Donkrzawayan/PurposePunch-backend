@@ -6,5 +6,5 @@ public interface IDecisionRepository
 {
     Task<Decision?> GetByIdAsync(int id);
     Task<IEnumerable<Decision>> GetAllAsync();
-    Task<Decision?> CreateAsync(Decision decision);
+    Task CreateAsync(Decision decision);
 }

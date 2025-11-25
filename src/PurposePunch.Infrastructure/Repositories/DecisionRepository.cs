@@ -24,10 +24,9 @@ public class DecisionRepository : IDecisionRepository
         return await _context.Decisions.FindAsync(id);
     }
 
-    public async Task<Decision?> CreateAsync(Decision decision)
+    public async Task CreateAsync(Decision decision)
     {
         await _context.Decisions.AddAsync(decision);
-        int affected = await _context.SaveChangesAsync();
-        return affected == 1 ? decision : null;
+        await _context.SaveChangesAsync();
     }
 }

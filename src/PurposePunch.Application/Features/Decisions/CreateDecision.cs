@@ -45,6 +45,8 @@ public class CreateDecisionHandler : IRequestHandler<CreateDecisionCommand, Deci
             UserId = userId
         };
 
-        return await _repo.CreateAsync(decision);
+        await _repo.CreateAsync(decision);
+
+        return decision;
     }
 }
