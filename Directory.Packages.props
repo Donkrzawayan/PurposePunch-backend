@@ -1,28 +1,29 @@
 <Project>
-	<PropertyGroup>
-		<ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
-		<MicrosoftPackageVersion>10.0.0</MicrosoftPackageVersion>
-	</PropertyGroup>
+  <PropertyGroup>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+    <MicrosoftPackageVersion>10.0.0</MicrosoftPackageVersion>
+  </PropertyGroup>
+	
+  <ItemGroup Label="For PostgreSQL">
+    <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="$(MicrosoftPackageVersion)" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Tools" Version="$(MicrosoftPackageVersion)" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Design" Version="$(MicrosoftPackageVersion)" />
+  </ItemGroup>
+	
+  <ItemGroup Label="Application">
+    <PackageVersion Include="MediatR" Version="12.5.0" />
+    <PackageVersion Include="FluentValidation.DependencyInjectionExtensions" Version="12.1.0" />
+  </ItemGroup>
+	
+  <ItemGroup Label="Api">
+    <PackageVersion Include="Swashbuckle.AspNetCore" Version="6.6.2" />
+  </ItemGroup>
+	
+  <ItemGroup Label="For Identity and JWT">
+    <PackageVersion Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="$(MicrosoftPackageVersion)" />
+    <PackageVersion Include="Microsoft.Extensions.Identity.Stores" Version="$(MicrosoftPackageVersion)" />
 
-	<ItemGroup Label="For PostgreSQL">
-		<PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="$(MicrosoftPackageVersion)" />
-		<PackageVersion Include="Microsoft.EntityFrameworkCore.Tools" Version="$(MicrosoftPackageVersion)" />
-		<PackageVersion Include="Microsoft.EntityFrameworkCore.Design" Version="$(MicrosoftPackageVersion)" />
-	</ItemGroup>
-
-	<ItemGroup Label="Application">
-		<PackageVersion Include="MediatR" Version="12.5.0" />
-		<PackageVersion Include="FluentValidation.DependencyInjectionExtensions" Version="12.1.0" />
-	</ItemGroup>
-
-	<ItemGroup Label="Api">
-		<PackageVersion Include="Swashbuckle.AspNetCore" Version="6.6.2" />
-	</ItemGroup>
-
-	<ItemGroup Label="For Identity and JWT">
-		<PackageVersion Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="$(MicrosoftPackageVersion)" />
-		<PackageVersion Include="Microsoft.Extensions.Identity.Stores" Version="$(MicrosoftPackageVersion)" />
-
-		<PackageVersion Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="$(MicrosoftPackageVersion)" />
-	</ItemGroup>
+    <PackageVersion Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="$(MicrosoftPackageVersion)" />
+	<PackageVersion Include="System.IdentityModel.Tokens.Jwt" Version="8.15.0" />
+  </ItemGroup>
 </Project>

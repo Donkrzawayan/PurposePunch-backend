@@ -1,4 +1,7 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+	<PropertyGroup>
+		<UserSecretsId>df669c0b-58a8-4b6a-abc4-02c80da9fe89</UserSecretsId>
+	</PropertyGroup>
 
 	<ItemGroup>
 		<ProjectReference Include="..\PurposePunch.Application\PurposePunch.Application.csproj" />

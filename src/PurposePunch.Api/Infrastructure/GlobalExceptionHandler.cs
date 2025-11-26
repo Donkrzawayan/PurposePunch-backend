@@ -41,6 +41,23 @@ public class GlobalExceptionHandler : IExceptionHandler
             return true;
         }
 
+        else if (exception is UnauthorizedAccessException)
+        {
+            httpContext.Response.StatusCode = StatusCodes.Status401Unauthorized;
+
+            var unauthorizedProblemDetails = new ProblemDetails
+            {
+                Status = StatusCodes.Status401Unauthorized,
+                Title = "Unauthorized",
+                Type = "https://tools.ietf.org/html/rfc9110#section-15.5.2",
+                Detail = exception.Message,
+                Instance = httpContext.Request.Path
+            };
+
+            await httpContext.Response.WriteAsJsonAsync(unauthorizedProblemDetails, cancellationToken);
+            return true;
+        }
+
         var problemDetails = new ProblemDetails
         {
             Title = "An error occurred",
