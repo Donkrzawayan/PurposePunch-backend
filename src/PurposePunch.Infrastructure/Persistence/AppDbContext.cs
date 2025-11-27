@@ -12,6 +12,7 @@ public class AppDbContext : IdentityDbContext<ApplicationUser>
     }
 
     public DbSet<Decision> Decisions { get; set; }
+    public DbSet<PublicPost> PublicPosts { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -26,5 +27,11 @@ public class AppDbContext : IdentityDbContext<ApplicationUser>
                   .HasForeignKey(d => d.UserId)
                   .IsRequired();
         });
+
+        modelBuilder.Entity<PublicPost>()
+            .HasOne<Decision>()
+            .WithMany()
+            .HasForeignKey(p => p.OriginalDecisionId)
+            .OnDelete(DeleteBehavior.SetNull);
     }
 }

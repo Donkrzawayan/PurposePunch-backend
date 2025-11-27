@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace PurposePunch.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreateWithIdentity : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -31,6 +31,7 @@ namespace PurposePunch.Infrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "text", nullable: false),
+                    AnonymousNickname = table.Column<string>(type: "text", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     UserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
@@ -164,12 +165,19 @@ namespace PurposePunch.Infrastructure.Migrations
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    UserId = table.Column<string>(type: "text", nullable: false),
                     Title = table.Column<string>(type: "character varying(60)", maxLength: 60, nullable: false),
                     Description = table.Column<string>(type: "text", nullable: false),
                     ExpectedOutcome = table.Column<string>(type: "text", nullable: false),
+                    Visibility = table.Column<int>(type: "integer", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    ExpectedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    UserId = table.Column<string>(type: "text", nullable: false)
+                    ExpectedReflectionDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    ActualOutcome = table.Column<string>(type: "text", nullable: true),
+                    LessonsLearned = table.Column<string>(type: "text", nullable: true),
+                    PrivateNotes = table.Column<string>(type: "text", nullable: true),
+                    ReflectedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    Satisfaction = table.Column<int>(type: "integer", nullable: true),
+                    Status = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -180,6 +188,33 @@ namespace PurposePunch.Infrastructure.Migrations
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "PublicPosts",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    OriginalDecisionId = table.Column<int>(type: "integer", nullable: true),
+                    AuthorNickname = table.Column<string>(type: "text", nullable: false),
+                    Title = table.Column<string>(type: "text", nullable: false),
+                    Description = table.Column<string>(type: "text", nullable: false),
+                    ActualOutcome = table.Column<string>(type: "text", nullable: true),
+                    LessonsLearned = table.Column<string>(type: "text", nullable: true),
+                    Satisfaction = table.Column<int>(type: "integer", nullable: true),
+                    PublishedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    HelpfulCount = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PublicPosts", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_PublicPosts_Decisions_OriginalDecisionId",
+                        column: x => x.OriginalDecisionId,
+                        principalTable: "Decisions",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
                 });
 
             migrationBuilder.CreateIndex(
@@ -223,6 +258,11 @@ namespace PurposePunch.Infrastructure.Migrations
                 name: "IX_Decisions_UserId",
                 table: "Decisions",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PublicPosts_OriginalDecisionId",
+                table: "PublicPosts",
+                column: "OriginalDecisionId");
         }
 
         /// <inheritdoc />
@@ -244,10 +284,13 @@ namespace PurposePunch.Infrastructure.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Decisions");
+                name: "PublicPosts");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "Decisions");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

@@ -12,8 +12,8 @@ using PurposePunch.Infrastructure.Persistence;
 namespace PurposePunch.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20251125164221_InitialCreateWithIdentity")]
-    partial class InitialCreateWithIdentity
+    [Migration("20251127000046_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -165,6 +165,9 @@ namespace PurposePunch.Infrastructure.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("ActualOutcome")
+                        .HasColumnType("text");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
@@ -172,12 +175,27 @@ namespace PurposePunch.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("ExpectedAt")
-                        .HasColumnType("timestamp with time zone");
-
                     b.Property<string>("ExpectedOutcome")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<DateTime>("ExpectedReflectionDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("LessonsLearned")
+                        .HasColumnType("text");
+
+                    b.Property<string>("PrivateNotes")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("ReflectedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int?>("Satisfaction")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -188,11 +206,59 @@ namespace PurposePunch.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<int>("Visibility")
+                        .HasColumnType("integer");
+
                     b.HasKey("Id");
 
                     b.HasIndex("UserId");
 
                     b.ToTable("Decisions");
+                });
+
+            modelBuilder.Entity("PurposePunch.Domain.Entities.PublicPost", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ActualOutcome")
+                        .HasColumnType("text");
+
+                    b.Property<string>("AuthorNickname")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("HelpfulCount")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("LessonsLearned")
+                        .HasColumnType("text");
+
+                    b.Property<int?>("OriginalDecisionId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("PublishedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int?>("Satisfaction")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OriginalDecisionId");
+
+                    b.ToTable("PublicPosts");
                 });
 
             modelBuilder.Entity("PurposePunch.Infrastructure.Identity.ApplicationUser", b =>
@@ -202,6 +268,9 @@ namespace PurposePunch.Infrastructure.Migrations
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("integer");
+
+                    b.Property<string>("AnonymousNickname")
+                        .HasColumnType("text");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
@@ -320,6 +389,14 @@ namespace PurposePunch.Infrastructure.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("PurposePunch.Domain.Entities.PublicPost", b =>
+                {
+                    b.HasOne("PurposePunch.Domain.Entities.Decision", null)
+                        .WithMany()
+                        .HasForeignKey("OriginalDecisionId")
+                        .OnDelete(DeleteBehavior.SetNull);
                 });
 #pragma warning restore 612, 618
         }
