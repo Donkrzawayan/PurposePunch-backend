@@ -43,4 +43,16 @@ public class DecisionsController : ControllerBase
         var addedDecision = await _mediator.Send(command);
         return CreatedAtAction(nameof(GetById), new { id = addedDecision.Id }, addedDecision);
     }
+
+    [HttpPut("{id}")]
+    public async Task<IActionResult> Update(int id, [FromBody] UpdateDecisionCommand command)
+    {
+        var commandWithId = command with { Id = id };
+        var success = await _mediator.Send(commandWithId);
+
+        if (!success)
+            return NotFound();
+
+        return NoContent();
+    }
 }

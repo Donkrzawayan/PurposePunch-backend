@@ -31,4 +31,10 @@ public class DecisionRepository : IDecisionRepository
         await _context.Decisions.AddAsync(decision);
         await _context.SaveChangesAsync();
     }
+
+    public async Task UpdateAsync(Decision decision)
+    {
+        _context.Decisions.Update(decision);
+        await _context.SaveChangesAsync();
+    }
 }

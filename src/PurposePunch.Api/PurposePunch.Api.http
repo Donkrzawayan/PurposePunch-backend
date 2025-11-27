@@ -38,3 +38,20 @@ Content-Type: application/json
   "expectedOutcome" : "To achieve this decision",
   "expectedReflectionDate" : "2026-12-31T18:00:00Z"
 }
+
+###
+PUT {{Api_HostAddress}}/api/decisions/2
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "id": 2,
+  "title": "New Decision user",
+  "description": "Description of the new decision",
+  "expectedOutcome": "To achieve this decision",
+  "visibility": 0,
+  "actualOutcome": "Done",
+  "lessonsLearned": null,
+  "privateNotes": null,
+  "satisfaction": 4
+}
