@@ -9,6 +9,7 @@ using PurposePunch.Application.Interfaces;
 using PurposePunch.Infrastructure.Identity;
 using PurposePunch.Infrastructure.Persistence;
 using PurposePunch.Infrastructure.Repositories;
+using PurposePunch.Infrastructure.Services;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -88,6 +89,7 @@ builder.Services.AddAuthentication(options =>
 
 builder.Services.AddScoped<IIdentityService, IdentityService>();
 builder.Services.AddScoped<IDecisionRepository, DecisionRepository>();
+builder.Services.AddTransient<INicknameGenerator, NicknameGenerator>();
 
 var app = builder.Build();
 

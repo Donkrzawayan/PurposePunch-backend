@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using PurposePunch.Application.Interfaces;
@@ -12,11 +13,16 @@ public class IdentityService : IIdentityService
 {
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly IConfiguration _configuration;
+    private readonly INicknameGenerator _nicknameGenerator;
 
-    public IdentityService(UserManager<ApplicationUser> userManager, IConfiguration configuration)
+    public IdentityService(
+        UserManager<ApplicationUser> userManager,
+        IConfiguration configuration,
+        INicknameGenerator nicknameGenerator)
     {
         _userManager = userManager;
         _configuration = configuration;
+        _nicknameGenerator = nicknameGenerator;
     }
 
     public async Task<string> LoginAsync(string email, string password)
@@ -46,8 +52,14 @@ public class IdentityService : IIdentityService
 
     public async Task<(bool IsSuccess, string[] Errors)> RegisterAsync(string email, string password)
     {
+        string? nickname = await GenerateNickname();
+
+        if (nickname == null)
+            return (false, new[] { "System is busy generating unique nicknames. Please try again later." });
+
         var user = new ApplicationUser
         {
+            AnonymousNickname = nickname,
             UserName = email,
             Email = email,
         };
@@ -58,6 +70,22 @@ public class IdentityService : IIdentityService
             return (false, result.Errors.Select(e => e.Description).ToArray());
 
         return (true, Array.Empty<string>());
+    }
+
+    private async Task<string?> GenerateNickname()
+    {
+        string nickname;
+
+        int maxRetries = 10;
+        bool isUnique = false;
+        do
+        {
+            nickname = _nicknameGenerator.Generate();
+            isUnique = !await _userManager.Users.AnyAsync(u => u.AnonymousNickname == nickname);
+            maxRetries -= 1;
+        } while (!isUnique && maxRetries > 0);
+
+        return isUnique ? nickname : null;
     }
 
     private string GenerateJwtToken(ApplicationUser user)

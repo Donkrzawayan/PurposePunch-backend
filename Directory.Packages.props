@@ -14,11 +14,15 @@
     <PackageVersion Include="MediatR" Version="12.5.0" />
     <PackageVersion Include="FluentValidation.DependencyInjectionExtensions" Version="12.1.0" />
   </ItemGroup>
+
+  <ItemGroup Label="Infrastructure">
+    <PackageVersion Include="Bogus" Version="35.6.5" />
+  </ItemGroup>
 	
   <ItemGroup Label="Api">
     <PackageVersion Include="Swashbuckle.AspNetCore" Version="6.6.2" />
   </ItemGroup>
-	
+
   <ItemGroup Label="For Identity and JWT">
     <PackageVersion Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="$(MicrosoftPackageVersion)" />
     <PackageVersion Include="Microsoft.Extensions.Identity.Stores" Version="$(MicrosoftPackageVersion)" />
