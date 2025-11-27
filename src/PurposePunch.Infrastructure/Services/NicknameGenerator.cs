@@ -19,6 +19,6 @@ public class NicknameGenerator : INicknameGenerator
 
         var number = _faker.Random.Number(10, 999);
 
-        return $"{adj}{noun}{number}";
+        return $"{adj}{noun}{number}".Replace(" ", "").Replace("-", "");
     }
 }
