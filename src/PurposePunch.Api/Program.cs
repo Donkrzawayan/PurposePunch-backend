@@ -89,6 +89,7 @@ builder.Services.AddAuthentication(options =>
 
 builder.Services.AddScoped<IIdentityService, IdentityService>();
 builder.Services.AddScoped<IDecisionRepository, DecisionRepository>();
+builder.Services.AddScoped<IPublicPostRepository, PublicPostRepository>();
 builder.Services.AddTransient<INicknameGenerator, NicknameGenerator>();
 
 var app = builder.Build();

@@ -55,3 +55,7 @@ Content-Type: application/json
   "privateNotes": null,
   "satisfaction": 4
 }
+
+###
+POST {{Api_HostAddress}}/api/decisions/3/publish
+Authorization: Bearer {{token}}

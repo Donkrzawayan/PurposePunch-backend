@@ -55,4 +55,22 @@ public class DecisionsController : ControllerBase
 
         return NoContent();
     }
+
+    [HttpPost("{id}/publish")]
+    public async Task<IActionResult> Publish(int id)
+    {
+        try
+        {
+            var postId = await _mediator.Send(new PublishDecisionCommand(id));
+
+            if (postId == null)
+                return NotFound();
+
+            return Ok(new { PublicPostId = postId, Message = "Decision published successfully!" });
+        }
+        catch (InvalidOperationException ex)
+        {
+            return BadRequest(new { Error = ex.Message });
+        }
+    }
 }

@@ -72,6 +72,12 @@ public class IdentityService : IIdentityService
         return (true, Array.Empty<string>());
     }
 
+    public async Task<string?> GetNicknameAsync(string userId)
+    {
+        var user = await _userManager.FindByIdAsync(userId);
+        return user?.AnonymousNickname;
+    }
+
     private async Task<string?> GenerateNickname()
     {
         string nickname;
