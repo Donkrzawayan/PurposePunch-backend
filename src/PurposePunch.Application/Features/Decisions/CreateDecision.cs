@@ -2,10 +2,17 @@
 using MediatR;
 using PurposePunch.Application.Interfaces;
 using PurposePunch.Domain.Entities;
+using PurposePunch.Domain.Enums;
 
 namespace PurposePunch.Application.Features.Decisions;
 
-public record CreateDecisionCommand(string Title, string Description) : IRequest<Decision>;
+public record CreateDecisionCommand(
+    string Title,
+    string Description,
+    string ExpectedOutcome,
+    Visibility Visibility,
+    DateTime ExpectedReflectionDate
+) : IRequest<Decision>;
 
 public class CreateDecisionValidator : AbstractValidator<CreateDecisionCommand>
 {
@@ -17,6 +24,10 @@ public class CreateDecisionValidator : AbstractValidator<CreateDecisionCommand>
 
         RuleFor(x => x.Description)
             .NotEmpty().WithMessage("Description is required.");
+
+        RuleFor(x => x.ExpectedReflectionDate)
+            .GreaterThan(_ => DateTime.UtcNow.AddHours(1)) // lambda to ensure its evaluated at runtime
+            .WithMessage("Reflection date must be at least 1 hour in the future.");
     }
 }
 
@@ -40,9 +51,14 @@ public class CreateDecisionHandler : IRequestHandler<CreateDecisionCommand, Deci
 
         var decision = new Decision
         {
+            UserId = userId,
             Title = cmd.Title,
             Description = cmd.Description,
-            UserId = userId
+            ExpectedOutcome = cmd.ExpectedOutcome,
+            Visibility = cmd.Visibility,
+            CreatedAt = DateTime.UtcNow,
+            ExpectedReflectionDate = cmd.ExpectedReflectionDate,
+            Status = DecisionStatus.Active
         };
 
         await _repo.CreateAsync(decision);

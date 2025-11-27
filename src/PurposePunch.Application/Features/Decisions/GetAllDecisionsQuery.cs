@@ -9,11 +9,21 @@ public record GetAllDecisionsQuery() : IRequest<IEnumerable<Decision>>;
 public class GetAllDecisionsQueryHandler : IRequestHandler<GetAllDecisionsQuery, IEnumerable<Decision>>
 {
     private readonly IDecisionRepository _repo;
+    private readonly ICurrentUserService _currentUserService;
 
-    public GetAllDecisionsQueryHandler(IDecisionRepository repo) => _repo = repo;
-
-    public Task<IEnumerable<Decision>> Handle(GetAllDecisionsQuery request, CancellationToken cancellationToken)
+    public GetAllDecisionsQueryHandler(IDecisionRepository repo, ICurrentUserService currentUserService)
     {
-        return _repo.GetAllAsync();
+        _repo = repo;
+        _currentUserService = currentUserService;
+    }
+
+    public async Task<IEnumerable<Decision>> Handle(GetAllDecisionsQuery request, CancellationToken cancellationToken)
+    {
+        var userId = _currentUserService.UserId;
+
+        if (string.IsNullOrEmpty(userId))
+            return Enumerable.Empty<Decision>();
+
+        return await _repo.GetAllByUserIdAsync(userId);
     }
 }

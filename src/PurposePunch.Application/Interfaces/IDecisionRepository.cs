@@ -5,6 +5,6 @@ namespace PurposePunch.Application.Interfaces;
 public interface IDecisionRepository
 {
     Task<Decision?> GetByIdAsync(int id);
-    Task<IEnumerable<Decision>> GetAllAsync();
+    Task<IEnumerable<Decision>> GetAllByUserIdAsync(string userId);
     Task CreateAsync(Decision decision);
 }

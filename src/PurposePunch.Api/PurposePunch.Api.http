@@ -21,9 +21,11 @@ Content-Type: application/json
 
 ###
 GET {{Api_HostAddress}}/api/decisions/
+Authorization: Bearer {{token}}
 
 ###
 GET {{Api_HostAddress}}/api/decisions/1
+Authorization: Bearer {{token}}
 
 ###
 POST {{Api_HostAddress}}/api/decisions/
@@ -32,5 +34,7 @@ Content-Type: application/json
 
 {
   "title": "New Decision",
-  "description": "Description of the new decision"
+  "description": "Description of the new decision",
+  "expectedOutcome" : "To achieve this decision",
+  "expectedReflectionDate" : "2026-12-31T18:00:00Z"
 }

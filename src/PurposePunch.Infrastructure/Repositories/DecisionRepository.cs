@@ -14,9 +14,11 @@ public class DecisionRepository : IDecisionRepository
         _context = context;
     }
 
-    public async Task<IEnumerable<Decision>> GetAllAsync()
+    public async Task<IEnumerable<Decision>> GetAllByUserIdAsync(string userId)
     {
-        return await _context.Decisions.ToListAsync();
+        return await _context.Decisions.Where(d => d.UserId == userId)
+            .OrderByDescending(d => d.CreatedAt)
+            .ToListAsync();
     }
 
     public async Task<Decision?> GetByIdAsync(int id)

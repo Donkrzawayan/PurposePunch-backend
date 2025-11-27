@@ -1,12 +1,13 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PurposePunch.Application.Features.Decisions;
-using PurposePunch.Domain.Entities;
 
 namespace PurposePunch.Api.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+[Authorize]
 public class DecisionsController : ControllerBase
 {
     private readonly IMediator _mediator;
