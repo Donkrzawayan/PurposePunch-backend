@@ -28,4 +28,24 @@ public class PublicPostRepository : IPublicPostRepository
         _context.PublicPosts.Update(post);
         await _context.SaveChangesAsync();
     }
+
+    public async Task<(IEnumerable<PublicPost> Items, int TotalCount)> GetPagedAsync(int pageNumber, int pageSize)
+    {
+        var query = _context.PublicPosts
+            .OrderByDescending(p => p.PublishedAt);
+
+        var totalCount = await query.CountAsync();
+
+        var items = await query
+            .Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync();
+
+        return (items, totalCount);
+    }
+
+    public async Task<PublicPost?> GetByIdAsync(int id)
+    {
+        return await _context.PublicPosts.FindAsync(id);
+    }
 }

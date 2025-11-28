@@ -59,3 +59,9 @@ Content-Type: application/json
 ###
 POST {{Api_HostAddress}}/api/decisions/3/publish
 Authorization: Bearer {{token}}
+
+###
+GET {{Api_HostAddress}}/api/publicPosts?pageNumber=1&pageSize=5
+
+###
+POST {{Api_HostAddress}}/api/publicPosts/1/upvote
