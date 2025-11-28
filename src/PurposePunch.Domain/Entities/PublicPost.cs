@@ -15,5 +15,5 @@ public class PublicPost
     public SatisfactionScale? Satisfaction { get; set; }
 
     public DateTime PublishedAt { get; set; } = DateTime.UtcNow;
-    public int HelpfulCount { get; set; } = 0;
+    public int UpvoteCount { get; set; } = 0;
 }

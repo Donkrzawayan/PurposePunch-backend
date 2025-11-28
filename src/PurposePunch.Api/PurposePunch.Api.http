@@ -60,8 +60,14 @@ Content-Type: application/json
 POST {{Api_HostAddress}}/api/decisions/3/publish
 Authorization: Bearer {{token}}
 
-###
+
+### PUBLIC POSTS ###
 GET {{Api_HostAddress}}/api/publicPosts?pageNumber=1&pageSize=5
 
-###
+### Upvote anonymously with X-Device-Id
 POST {{Api_HostAddress}}/api/publicPosts/1/upvote
+X-Device-Id: b3058f02-ba6e-45cd-8e1f-ef100e188a2e
+
+### Upvote when logged in
+POST {{Api_HostAddress}}/api/publicPosts/1/upvote
+Authorization: Bearer {{token}}

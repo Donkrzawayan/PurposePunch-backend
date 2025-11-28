@@ -9,5 +9,5 @@ public interface IPublicPostRepository
     Task UpdateAsync(PublicPost post);
     Task<(IEnumerable<PublicPost> Items, int TotalCount)> GetPagedAsync(int pageNumber, int pageSize);
     Task<PublicPost?> GetByIdAsync(int id);
-    Task IncrementUpvoteCountAsync(int id);
+    Task<bool> RegisterUpvoteAsync(int id, string voterIdentifier);
 }

@@ -204,7 +204,7 @@ namespace PurposePunch.Infrastructure.Migrations
                     LessonsLearned = table.Column<string>(type: "text", nullable: true),
                     Satisfaction = table.Column<int>(type: "integer", nullable: true),
                     PublishedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    HelpfulCount = table.Column<int>(type: "integer", nullable: false)
+                    UpvoteCount = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -215,6 +215,24 @@ namespace PurposePunch.Infrastructure.Migrations
                         principalTable: "Decisions",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.SetNull);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "PostLikes",
+                columns: table => new
+                {
+                    PostId = table.Column<int>(type: "integer", nullable: false),
+                    VoterIdentifier = table.Column<string>(type: "character varying(80)", maxLength: 80, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PostLikes", x => new { x.PostId, x.VoterIdentifier });
+                    table.ForeignKey(
+                        name: "FK_PostLikes_PublicPosts_PostId",
+                        column: x => x.PostId,
+                        principalTable: "PublicPosts",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -284,10 +302,13 @@ namespace PurposePunch.Infrastructure.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "PublicPosts");
+                name: "PostLikes");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "PublicPosts");
 
             migrationBuilder.DropTable(
                 name: "Decisions");

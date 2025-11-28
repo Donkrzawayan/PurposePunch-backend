@@ -12,7 +12,7 @@ using PurposePunch.Infrastructure.Persistence;
 namespace PurposePunch.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20251127000046_InitialCreate")]
+    [Migration("20251128161224_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -216,6 +216,20 @@ namespace PurposePunch.Infrastructure.Migrations
                     b.ToTable("Decisions");
                 });
 
+            modelBuilder.Entity("PurposePunch.Domain.Entities.PostLike", b =>
+                {
+                    b.Property<int>("PostId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("VoterIdentifier")
+                        .HasMaxLength(80)
+                        .HasColumnType("character varying(80)");
+
+                    b.HasKey("PostId", "VoterIdentifier");
+
+                    b.ToTable("PostLikes");
+                });
+
             modelBuilder.Entity("PurposePunch.Domain.Entities.PublicPost", b =>
                 {
                     b.Property<int>("Id")
@@ -235,9 +249,6 @@ namespace PurposePunch.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("HelpfulCount")
-                        .HasColumnType("integer");
-
                     b.Property<string>("LessonsLearned")
                         .HasColumnType("text");
 
@@ -253,6 +264,9 @@ namespace PurposePunch.Infrastructure.Migrations
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<int>("UpvoteCount")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
@@ -387,6 +401,15 @@ namespace PurposePunch.Infrastructure.Migrations
                     b.HasOne("PurposePunch.Infrastructure.Identity.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("PurposePunch.Domain.Entities.PostLike", b =>
+                {
+                    b.HasOne("PurposePunch.Domain.Entities.PublicPost", null)
+                        .WithMany()
+                        .HasForeignKey("PostId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

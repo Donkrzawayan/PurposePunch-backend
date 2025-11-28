@@ -13,6 +13,7 @@ public class AppDbContext : IdentityDbContext<ApplicationUser>
 
     public DbSet<Decision> Decisions { get; set; }
     public DbSet<PublicPost> PublicPosts { get; set; }
+    public DbSet<PostLike> PostLikes { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -33,5 +34,19 @@ public class AppDbContext : IdentityDbContext<ApplicationUser>
             .WithMany()
             .HasForeignKey(p => p.OriginalDecisionId)
             .OnDelete(DeleteBehavior.SetNull);
+
+        modelBuilder.Entity<PostLike>(entity =>
+        {
+            entity.HasKey(pl => new { pl.PostId, pl.VoterIdentifier });
+            entity.Property(pl => pl.VoterIdentifier)
+                .HasMaxLength(80)
+                .IsRequired();
+
+            entity.HasOne<PublicPost>()
+                .WithMany()
+                .HasForeignKey(pl => pl.PostId)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Cascade);
+        });
     }
 }

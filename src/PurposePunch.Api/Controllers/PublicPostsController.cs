@@ -42,6 +42,6 @@ public class PublicPostsController : ControllerBase
         if (newCount == null)
             return NotFound();
 
-        return Ok(new { HelpfulCount = newCount });
+        return Ok(new { UpvoteCount = newCount });
     }
 }

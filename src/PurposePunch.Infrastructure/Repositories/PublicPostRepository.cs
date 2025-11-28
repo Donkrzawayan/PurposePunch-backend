@@ -49,12 +49,35 @@ public class PublicPostRepository : IPublicPostRepository
         return await _context.PublicPosts.FindAsync(id);
     }
 
-    public async Task IncrementUpvoteCountAsync(int id)
+    public async Task<bool> RegisterUpvoteAsync(int id, string voterIdentifier)
     {
-        await _context.PublicPosts
-            .Where(p => p.Id == id)
-            .ExecuteUpdateAsync(s => s.SetProperty(
-                p => p.HelpfulCount,
-                p => p.HelpfulCount + 1));
+        var like = new PostLike
+        {
+            PostId = id,
+            VoterIdentifier = voterIdentifier
+        };
+
+        using var transaction = await _context.Database.BeginTransactionAsync();
+
+        try
+        {
+            _context.PostLikes.Add(like);
+            await _context.SaveChangesAsync();
+
+            await _context.PublicPosts
+                .Where(p => p.Id == id)
+                .ExecuteUpdateAsync(s => s.SetProperty(
+                    p => p.UpvoteCount,
+                    p => p.UpvoteCount + 1));
+
+            await transaction.CommitAsync();
+
+            return true;
+        }
+        catch (DbUpdateException)
+        {
+            await transaction.RollbackAsync();
+            return false;
+        }
     }
 }
