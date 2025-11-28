@@ -48,4 +48,13 @@ public class PublicPostRepository : IPublicPostRepository
     {
         return await _context.PublicPosts.FindAsync(id);
     }
+
+    public async Task IncrementUpvoteCountAsync(int id)
+    {
+        await _context.PublicPosts
+            .Where(p => p.Id == id)
+            .ExecuteUpdateAsync(s => s.SetProperty(
+                p => p.HelpfulCount,
+                p => p.HelpfulCount + 1));
+    }
 }

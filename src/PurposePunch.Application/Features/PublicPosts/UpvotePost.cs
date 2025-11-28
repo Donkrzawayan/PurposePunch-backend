@@ -16,14 +16,8 @@ public class UpvotePostHandler : IRequestHandler<UpvotePostCommand, int?>
 
     public async Task<int?> Handle(UpvotePostCommand request, CancellationToken cancellationToken)
     {
+        await _repo.IncrementUpvoteCountAsync(request.PostId);
         var post = await _repo.GetByIdAsync(request.PostId);
-        if (post == null)
-            return null;
-
-        post.HelpfulCount++;
-
-        await _repo.UpdateAsync(post);
-
-        return post.HelpfulCount;
+        return post?.HelpfulCount;
     }
 }
