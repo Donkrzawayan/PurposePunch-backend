@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PurposePunch.Application.Interfaces;
 using PurposePunch.Domain.Entities;
+using PurposePunch.Domain.Enums;
 using PurposePunch.Infrastructure.Persistence;
 
 namespace PurposePunch.Infrastructure.Repositories;
@@ -37,4 +38,14 @@ public class DecisionRepository : IDecisionRepository
         _context.Decisions.Update(decision);
         await _context.SaveChangesAsync();
     }
+
+    #region Background Job Methods
+    public async Task<int> MarkExpiredAsAbandonedAsync(DateTime cutoffDate)
+    {
+        return await _context.Decisions
+            .Where(d => d.Status == DecisionStatus.Active && d.ExpectedReflectionDate < cutoffDate)
+            .ExecuteUpdateAsync(s => s.SetProperty(
+                d => d.Status, DecisionStatus.Abandoned));
+    }
+    #endregion
 }

@@ -7,6 +7,7 @@ using PurposePunch.Api.Services;
 using PurposePunch.Application;
 using PurposePunch.Application.Interfaces;
 using PurposePunch.Infrastructure.Identity;
+using PurposePunch.Infrastructure.Jobs;
 using PurposePunch.Infrastructure.Persistence;
 using PurposePunch.Infrastructure.Repositories;
 using PurposePunch.Infrastructure.Services;
@@ -91,6 +92,8 @@ builder.Services.AddScoped<IIdentityService, IdentityService>();
 builder.Services.AddScoped<IDecisionRepository, DecisionRepository>();
 builder.Services.AddScoped<IPublicPostRepository, PublicPostRepository>();
 builder.Services.AddTransient<INicknameGenerator, NicknameGenerator>();
+
+builder.Services.AddHostedService<DecisionExpirationJob>();
 
 var app = builder.Build();
 

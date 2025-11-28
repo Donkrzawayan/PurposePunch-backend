@@ -30,4 +30,8 @@
     <PackageVersion Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="$(MicrosoftPackageVersion)" />
 	<PackageVersion Include="System.IdentityModel.Tokens.Jwt" Version="8.15.0" />
   </ItemGroup>
+
+	<ItemGroup Label="For Background Job">
+		<PackageVersion Include="Microsoft.Extensions.Hosting" Version="$(MicrosoftPackageVersion)" />
+	</ItemGroup>
 </Project>
