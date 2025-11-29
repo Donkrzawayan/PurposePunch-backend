@@ -1,19 +1,35 @@
 ﻿using MediatR;
+using PurposePunch.Application.DTOs;
 using PurposePunch.Application.Interfaces;
 using PurposePunch.Domain.Entities;
 
 namespace PurposePunch.Application.Features.PublicPosts;
 
-public record GetPublicPostByIdQuery(int Id) : IRequest<PublicPost?>;
+public record GetPublicPostByIdQuery(int Id) : IRequest<PublicPostDto?>;
 
-public class GetPublicPostByIdHandler : IRequestHandler<GetPublicPostByIdQuery, PublicPost?>
+public class GetPublicPostByIdHandler : IRequestHandler<GetPublicPostByIdQuery, PublicPostDto?>
 {
     private readonly IPublicPostRepository _repo;
 
     public GetPublicPostByIdHandler(IPublicPostRepository repo) => _repo = repo;
 
-    public async Task<PublicPost?> Handle(GetPublicPostByIdQuery request, CancellationToken cancellationToken)
+    public async Task<PublicPostDto?> Handle(GetPublicPostByIdQuery request, CancellationToken cancellationToken)
     {
-        return await _repo.GetByIdAsync(request.Id);
+        var post = await _repo.GetByIdAsync(request.Id);
+
+        if (post == null)
+            return null;
+
+        return new PublicPostDto(
+            post.Id,
+            post.AuthorNickname,
+            post.Title,
+            post.Description,
+            post.ActualOutcome,
+            post.LessonsLearned,
+            post.Satisfaction,
+            post.UpvoteCount,
+            post.PublishedAt
+        );
     }
 }

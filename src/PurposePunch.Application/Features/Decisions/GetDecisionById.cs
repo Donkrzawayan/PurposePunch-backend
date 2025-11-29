@@ -1,12 +1,12 @@
 ﻿using MediatR;
+using PurposePunch.Application.DTOs;
 using PurposePunch.Application.Interfaces;
-using PurposePunch.Domain.Entities;
 
 namespace PurposePunch.Application.Features.Decisions;
 
-public record GetDecisionByIdQuery(int Id) : IRequest<Decision?>;
+public record GetDecisionByIdQuery(int Id) : IRequest<DecisionDto?>;
 
-public class GetDecisionByIdQueryHandler : IRequestHandler<GetDecisionByIdQuery, Decision?>
+public class GetDecisionByIdQueryHandler : IRequestHandler<GetDecisionByIdQuery, DecisionDto?>
 {
     private readonly IDecisionRepository _repo;
     private readonly ICurrentUserService _currentUserService;
@@ -17,7 +17,7 @@ public class GetDecisionByIdQueryHandler : IRequestHandler<GetDecisionByIdQuery,
         _currentUserService = currentUserService;
     }
 
-    public async Task<Decision?> Handle(GetDecisionByIdQuery request, CancellationToken cancellationToken)
+    public async Task<DecisionDto?> Handle(GetDecisionByIdQuery request, CancellationToken cancellationToken)
     {
         var userId = _currentUserService.UserId;
 
@@ -29,6 +29,20 @@ public class GetDecisionByIdQueryHandler : IRequestHandler<GetDecisionByIdQuery,
         if (decision == null || decision.UserId != userId)
             return null;
 
-        return decision;
+        return new DecisionDto(
+            decision.Id,
+            decision.Title,
+            decision.Description,
+            decision.ExpectedOutcome,
+            decision.Visibility,
+            decision.CreatedAt,
+            decision.ExpectedReflectionDate,
+            decision.Status,
+            decision.ActualOutcome,
+            decision.LessonsLearned,
+            decision.PrivateNotes,
+            decision.Satisfaction,
+            decision.ReflectedAt
+        );
     }
 }
