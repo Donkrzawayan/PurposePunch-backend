@@ -8,4 +8,7 @@
     <Project Path="src/PurposePunch.Domain/PurposePunch.Domain.csproj" />
     <Project Path="src/PurposePunch.Infrastructure/PurposePunch.Infrastructure.csproj" />
   </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/PurposePunch.Application.Tests/PurposePunch.Application.Tests.csproj" />
+  </Folder>
 </Solution>
