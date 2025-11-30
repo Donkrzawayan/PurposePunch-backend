@@ -10,5 +10,6 @@
   </Folder>
   <Folder Name="/tests/">
     <Project Path="tests/PurposePunch.Application.Tests/PurposePunch.Application.Tests.csproj" />
+    <Project Path="tests/PurposePunch.IntegrationTests/PurposePunch.IntegrationTests.csproj" />
   </Folder>
 </Solution>
