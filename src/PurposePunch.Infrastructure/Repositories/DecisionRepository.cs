@@ -39,6 +39,12 @@ public class DecisionRepository : IDecisionRepository
         await _context.SaveChangesAsync();
     }
 
+    public async Task DeleteAsync(Decision decision)
+    {
+        _context.Decisions.Remove(decision);
+        await _context.SaveChangesAsync();
+    }
+
     #region Background Job Methods
     public async Task<int> MarkExpiredAsAbandonedAsync(DateTime cutoffDate)
     {

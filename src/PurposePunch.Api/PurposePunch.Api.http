@@ -57,6 +57,10 @@ Content-Type: application/json
 }
 
 ###
+DELETE {{Api_HostAddress}}/api/decisions/1
+Authorization: Bearer {{token}}
+
+###
 POST {{Api_HostAddress}}/api/decisions/3/publish
 Authorization: Bearer {{token}}
 

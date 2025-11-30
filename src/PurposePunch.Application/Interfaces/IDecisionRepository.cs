@@ -8,6 +8,7 @@ public interface IDecisionRepository
     Task<IEnumerable<Decision>> GetAllByUserIdAsync(string userId);
     Task CreateAsync(Decision decision);
     Task UpdateAsync(Decision decision);
+    Task DeleteAsync(Decision decision);
 
     Task<int> MarkExpiredAsAbandonedAsync(DateTime cutoffDate);
 }

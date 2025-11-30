@@ -56,6 +56,17 @@ public class DecisionsController : ControllerBase
         return NoContent();
     }
 
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Delete(int id)
+    {
+        var command = new DeleteDecisionCommand(id);
+        var success = await _mediator.Send(command);
+        if (!success)
+            return NotFound();
+
+        return NoContent();
+    }
+
     [HttpPost("{id}/publish")]
     public async Task<IActionResult> Publish(int id)
     {
