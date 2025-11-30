@@ -6,12 +6,12 @@ namespace PurposePunch.Application.Features.Decisions;
 
 public record GetAllDecisionsQuery() : IRequest<IEnumerable<DecisionDto>>;
 
-public class GetAllDecisionsQueryHandler : IRequestHandler<GetAllDecisionsQuery, IEnumerable<DecisionDto>>
+public class GetAllDecisionsHandler : IRequestHandler<GetAllDecisionsQuery, IEnumerable<DecisionDto>>
 {
     private readonly IDecisionRepository _repo;
     private readonly ICurrentUserService _currentUserService;
 
-    public GetAllDecisionsQueryHandler(IDecisionRepository repo, ICurrentUserService currentUserService)
+    public GetAllDecisionsHandler(IDecisionRepository repo, ICurrentUserService currentUserService)
     {
         _repo = repo;
         _currentUserService = currentUserService;
