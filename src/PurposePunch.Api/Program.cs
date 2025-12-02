@@ -95,6 +95,23 @@ builder.Services.AddTransient<INicknameGenerator, NicknameGenerator>();
 
 builder.Services.AddHostedService<DecisionExpirationJob>();
 
+const string CORS_POLICY = "AllowReactApp";
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: CORS_POLICY, policy =>
+        {
+            var allowedOrigins = builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>();
+
+            if (allowedOrigins != null && allowedOrigins.Length != 0)
+            {
+                policy.WithOrigins(allowedOrigins)
+                      .AllowAnyHeader()
+                      .AllowAnyMethod();
+            }
+        });
+});
+
 var app = builder.Build();
 
 app.UseExceptionHandler();
@@ -106,7 +123,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+app.UseRouting();
+app.UseCors(CORS_POLICY);
 
 app.UseAuthentication();
 app.UseAuthorization();
