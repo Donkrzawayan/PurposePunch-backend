@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 using MediatR;
 using PurposePunch.Application.Interfaces;
+using PurposePunch.Domain.Entities;
 using PurposePunch.Domain.Enums;
 
 namespace PurposePunch.Application.Features.Decisions;
@@ -74,23 +75,34 @@ public class UpdateDecisionHandler : IRequestHandler<UpdateDecisionCommand, bool
         decision.PrivateNotes = request.PrivateNotes;
         decision.Satisfaction = request.Satisfaction;
 
+        decision = UpdateDecisionStatus(request, decision);
+
+        await _repo.UpdateAsync(decision);
+
+        return true;
+    }
+
+    private static Decision UpdateDecisionStatus(UpdateDecisionCommand request, Decision decision)
+    {
         bool hasReflectionContent = !string.IsNullOrWhiteSpace(request.ActualOutcome)
                                     || !string.IsNullOrWhiteSpace(request.LessonsLearned)
                                     || request.Satisfaction.HasValue;
 
-        if (hasReflectionContent && decision.Status == DecisionStatus.Active)
+        if (hasReflectionContent
+            && (decision.Status == DecisionStatus.Active || decision.Status == DecisionStatus.Abandoned))
         {
             decision.Status = DecisionStatus.Reflected;
             decision.ReflectedAt = DateTime.UtcNow;
         }
         else if (!hasReflectionContent && decision.Status == DecisionStatus.Reflected)
         {
-            decision.Status = DecisionStatus.Active;
+            if (decision.ExpectedReflectionDate > DateTime.UtcNow)
+                decision.Status = DecisionStatus.Active;
+            else
+                decision.Status = DecisionStatus.Abandoned;
             decision.ReflectedAt = null;
         }
 
-        await _repo.UpdateAsync(decision);
-
-        return true;
+        return decision;
     }
 }
