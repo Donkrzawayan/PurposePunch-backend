@@ -15,11 +15,7 @@ namespace PurposePunch.Api.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register(RegisterCommand command)
         {
-            var errors = await _mediator.Send(command);
-
-            if (errors.Any())
-                return BadRequest(new { Errors = errors });
-
+            await _mediator.Send(command);
             return Ok(new { Message = "User registered successfully" });
         }
 
