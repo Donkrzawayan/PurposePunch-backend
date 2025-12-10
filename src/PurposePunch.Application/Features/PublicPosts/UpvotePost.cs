@@ -9,7 +9,6 @@ public class UpvotePostHandler : IRequestHandler<UpvotePostCommand, int?>
 {
     private readonly IPublicPostRepository _repo;
     private readonly ICurrentUserService _currentUserService;
-    private const string DevicePrefix = "DEVICE:";
 
     public UpvotePostHandler(IPublicPostRepository repo, ICurrentUserService currentUserService)
     {
@@ -19,20 +18,15 @@ public class UpvotePostHandler : IRequestHandler<UpvotePostCommand, int?>
 
     public async Task<int?> Handle(UpvotePostCommand request, CancellationToken cancellationToken)
     {
-        string voterIdentifier;
-
-        if (!string.IsNullOrEmpty(_currentUserService.UserId))
-            voterIdentifier = _currentUserService.UserId;
-        else if (!string.IsNullOrEmpty(_currentUserService.DeviceId))
-            voterIdentifier = $"{DevicePrefix}{_currentUserService.DeviceId}";
-        else
+        string? voterId = _currentUserService.VoterIdentifier;
+        if (string.IsNullOrEmpty(voterId))
             return null;
 
         var post = await _repo.GetByIdAsync(request.PostId);
         if (post == null)
             return null;
 
-        bool added = await _repo.RegisterUpvoteAsync(request.PostId, voterIdentifier);
+        bool added = await _repo.RegisterUpvoteAsync(request.PostId, voterId);
 
         return added ? post.UpvoteCount + 1 : post?.UpvoteCount;
     }

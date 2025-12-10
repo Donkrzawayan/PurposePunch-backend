@@ -11,5 +11,6 @@ public record PublicPostDto(
     string? LessonsLearned,
     SatisfactionScale? Satisfaction,
     int UpvoteCount,
-    DateTime PublishedAt
+    DateTime PublishedAt,
+    bool IsUpvoted
 );

@@ -3,5 +3,5 @@
 public interface ICurrentUserService
 {
     string? UserId { get; }
-    string? DeviceId { get; }
+    string? VoterIdentifier { get; }
 }

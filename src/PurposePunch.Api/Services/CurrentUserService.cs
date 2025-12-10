@@ -7,16 +7,17 @@ public class CurrentUserService : ICurrentUserService
 {
     private readonly IHttpContextAccessor _httpContextAccessor;
     private const int DeviceIdLength = 36;
+    private const string DevicePrefix = "DEVICE:";
 
     public CurrentUserService(IHttpContextAccessor httpContextAccessor)
     {
         _httpContextAccessor = httpContextAccessor;
     }
 
-    public string? UserId => 
+    public string? UserId =>
         _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
 
-    public string? DeviceId
+    private string? DeviceId
     {
         get
         {
@@ -26,6 +27,19 @@ public class CurrentUserService : ICurrentUserService
                 || !deviceId.All(c => char.IsLetterOrDigit(c) || c == '-'))
                 return null;
             return deviceId;
+        }
+    }
+
+    public string? VoterIdentifier
+    {
+        get
+        {
+            if (!string.IsNullOrEmpty(UserId))
+                return UserId;
+            if (!string.IsNullOrEmpty(DeviceId))
+                return $"{DevicePrefix}{DeviceId}";
+
+            return null;
         }
     }
 }

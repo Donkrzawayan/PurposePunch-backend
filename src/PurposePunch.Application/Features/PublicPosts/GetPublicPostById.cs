@@ -10,15 +10,22 @@ public record GetPublicPostByIdQuery(int Id) : IRequest<PublicPostDto?>;
 public class GetPublicPostByIdHandler : IRequestHandler<GetPublicPostByIdQuery, PublicPostDto?>
 {
     private readonly IPublicPostRepository _repo;
+    private readonly ICurrentUserService _currentUserService;
 
-    public GetPublicPostByIdHandler(IPublicPostRepository repo) => _repo = repo;
+    public GetPublicPostByIdHandler(IPublicPostRepository repo, ICurrentUserService currentUserService)
+    {
+        _repo = repo;
+        _currentUserService = currentUserService;
+    }
 
     public async Task<PublicPostDto?> Handle(GetPublicPostByIdQuery request, CancellationToken cancellationToken)
     {
         var post = await _repo.GetByIdAsync(request.Id);
-
         if (post == null)
             return null;
+
+        var voterId = _currentUserService.VoterIdentifier;
+        bool isUpvoted = voterId != null && await _repo.IsUpvotedByUserAsync(post.Id, voterId);
 
         return new PublicPostDto(
             post.Id,
@@ -29,7 +36,8 @@ public class GetPublicPostByIdHandler : IRequestHandler<GetPublicPostByIdQuery, 
             post.LessonsLearned,
             post.Satisfaction,
             post.UpvoteCount,
-            post.PublishedAt
+            post.PublishedAt,
+            isUpvoted
         );
     }
 }

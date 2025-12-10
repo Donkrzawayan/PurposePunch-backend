@@ -49,12 +49,12 @@ public class PublicPostRepository : IPublicPostRepository
         return await _context.PublicPosts.FindAsync(id);
     }
 
-    public async Task<bool> RegisterUpvoteAsync(int id, string voterIdentifier)
+    public async Task<bool> RegisterUpvoteAsync(int id, string voterId)
     {
         var like = new PostLike
         {
             PostId = id,
-            VoterIdentifier = voterIdentifier
+            VoterIdentifier = voterId
         };
 
         using var transaction = await _context.Database.BeginTransactionAsync();
@@ -71,13 +71,29 @@ public class PublicPostRepository : IPublicPostRepository
                     p => p.UpvoteCount + 1));
 
             await transaction.CommitAsync();
-
-            return true;
         }
         catch (DbUpdateException)
         {
             await transaction.RollbackAsync();
             return false;
         }
+
+        return true;
+    }
+
+    public async Task<bool> IsUpvotedByUserAsync(int postId, string voterId)
+    {
+        return await _context.PostLikes
+            .AnyAsync(pl => pl.PostId == postId && pl.VoterIdentifier == voterId);
+    }
+
+    public async Task<HashSet<int>> GetUpvotedPostIdsForUserAsync(IEnumerable<int> postIds, string voterId)
+    {
+        var likedIds = await _context.PostLikes
+            .Where(pl => pl.VoterIdentifier == voterId && postIds.Contains(pl.PostId))
+            .Select(pl => pl.PostId)
+            .ToListAsync();
+
+        return likedIds.ToHashSet();
     }
 }

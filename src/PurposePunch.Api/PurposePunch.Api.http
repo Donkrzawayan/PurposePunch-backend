@@ -68,6 +68,14 @@ Authorization: Bearer {{token}}
 ### PUBLIC POSTS ###
 GET {{Api_HostAddress}}/api/publicPosts?pageNumber=1&pageSize=5
 
+### Get public posts list when logged in
+GET {{Api_HostAddress}}/api/publicPosts?pageNumber=1&pageSize=5
+Authorization: Bearer {{token}}
+
+### Get public post by ID when logged in
+GET {{Api_HostAddress}}/api/publicPosts/3
+Authorization: Bearer {{token}}
+
 ### Upvote anonymously with X-Device-Id
 POST {{Api_HostAddress}}/api/publicPosts/1/upvote
 X-Device-Id: b3058f02-ba6e-45cd-8e1f-ef100e188a2e
