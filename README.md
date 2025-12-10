@@ -1,14 +1,15 @@
-# Purpose?Punch!
+# Purpose:Punch!
 
 ![.NET 10](https://img.shields.io/badge/.NET-10.0-522cd4)
+![PostgreSQL 17.7](https://img.shields.io/badge/PostgreSQL-17.7-2f6792)
 
-**Purpose** of this app? To **punch** you for every decision you have made but never achieved. Now every such uncompleted decision will be put on public display, and you can already feel **punched** out!
+**Purpose** of this app: To **punch** you for every decision you have made but never achieved. Now every such uncompleted decision will be put on public display, and you can already feel **punched** out!
 
 ## Concept
 
 Users log significant decisions with reasoning and expectations.  
-After a reflection period, they record outcomes and lessons learned.  
-They can optionally publish anonymized reflections for others to browse, learn from, or get inspired by.
+After a reflection period, users record outcomes and lessons learned.  
+Users can optionally publish anonymized reflections for others to browse, learn from, or get inspired by.
 
 ## Tech Stack & Architecture
 
@@ -17,7 +18,7 @@ They can optionally publish anonymized reflections for others to browse, learn f
 - **ORM:** Entity Framework Core (Code-First)
 - **Architecture:** Clean Architecture (Domain, Application, Infrastructure, API)
 - **Patterns:** CQRS (via MediatR), Repository Pattern, Result Pattern
-- **Testing:** xUnit, NSubstitute, FluentAssertions
+- **Testing:** xUnit, NSubstitute, Testcontainers, FluentAssertions
 
 ## Getting Started
 

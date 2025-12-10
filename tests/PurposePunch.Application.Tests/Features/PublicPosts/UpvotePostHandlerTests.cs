@@ -1,4 +1,5 @@
-﻿using NSubstitute;
+﻿using FluentAssertions;
+using NSubstitute;
 using PurposePunch.Application.Features.PublicPosts;
 using PurposePunch.Application.Interfaces;
 using PurposePunch.Domain.Entities;
@@ -19,43 +20,35 @@ public class UpvotePostHandlerTests
     }
 
     [Fact]
-    public async Task Handle_ShouldUseDeviceId_WhenUserIsNotLoggedIn()
+    public async Task Handle_ShouldPassVoterIdentifierToRepo_WhenIdentifierExists()
     {
         // ARRANGE
         var postId = 1;
-        var deviceId = "f02f3958-0ee8-4036-b35e-f6b973c6598e";
-
-        _userMock.UserId.Returns((string?)null); // User not logged in
-        _userMock.DeviceId.Returns(deviceId);
+        var expectedVoterId = "DEVICE:f02f3958-0ee8-4036-b35e-f6b973c6598e";
+        _userMock.VoterIdentifier.Returns(expectedVoterId);
 
         var post = new PublicPost { Id = postId, UpvoteCount = 10, AuthorNickname = "Anon", Description = "", Title = "" };
         _repoMock.GetByIdAsync(postId).Returns(post);
-
         _repoMock.RegisterUpvoteAsync(postId, Arg.Any<string>()).Returns(true);
 
         // ACT
         await _handler.Handle(new UpvotePostCommand(postId), CancellationToken.None);
 
         // ASSERT
-        await _repoMock.Received(1).RegisterUpvoteAsync(postId, $"DEVICE:{deviceId}");
+        await _repoMock.Received(1).RegisterUpvoteAsync(postId, expectedVoterId);
     }
 
     [Fact]
-    public async Task Handle_ShouldUseUserId_WhenUserIsLoggedIn()
+    public async Task Handle_ShouldReturnNull_WhenVoterIdentifierIsNull()
     {
         // ARRANGE
-        var userId = "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa";
-        _userMock.UserId.Returns(userId);
-        _userMock.DeviceId.Returns("f02f3958-0ee8-4036-b35e-f6b973c6598e");
-
-        var post = new PublicPost { Id = 1, UpvoteCount = 5, AuthorNickname = "Anon", Description = "", Title = "" };
-        _repoMock.GetByIdAsync(1).Returns(post);
-        _repoMock.RegisterUpvoteAsync(1, Arg.Any<string>()).Returns(true);
+        _userMock.VoterIdentifier.Returns((string?)null);
 
         // ACT
-        await _handler.Handle(new UpvotePostCommand(1), CancellationToken.None);
+        var result = await _handler.Handle(new UpvotePostCommand(1), CancellationToken.None);
 
         // ASSERT
-        await _repoMock.Received(1).RegisterUpvoteAsync(1, userId);
+        result.Should().BeNull();
+        await _repoMock.DidNotReceive().RegisterUpvoteAsync(Arg.Any<int>(), Arg.Any<string>());
     }
 }
