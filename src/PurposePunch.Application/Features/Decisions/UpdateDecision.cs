@@ -62,17 +62,17 @@ public class UpdateDecisionHandler : IRequestHandler<UpdateDecisionCommand, bool
         if (decision == null || decision.UserId != userId)
             return false;
 
-        decision.Title = request.Title;
-        decision.Description = request.Description;
-        decision.ExpectedOutcome = request.ExpectedOutcome;
+        decision.Title = request.Title.Trim();
+        decision.Description = request.Description.Trim();
+        decision.ExpectedOutcome = request.ExpectedOutcome.Trim();
         decision.Visibility = request.Visibility;
         if (request.ExpectedReflectionDate.HasValue)
             decision.ExpectedReflectionDate = request.ExpectedReflectionDate.Value;
 
         // PHASE 2: Reflection
-        decision.ActualOutcome = request.ActualOutcome;
-        decision.LessonsLearned = request.LessonsLearned;
-        decision.PrivateNotes = request.PrivateNotes;
+        decision.ActualOutcome = request.ActualOutcome?.Trim();
+        decision.LessonsLearned = request.LessonsLearned?.Trim();
+        decision.PrivateNotes = request.PrivateNotes?.Trim();
         decision.Satisfaction = request.Satisfaction;
 
         decision = UpdateDecisionStatus(request, decision);

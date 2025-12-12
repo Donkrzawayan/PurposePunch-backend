@@ -52,9 +52,9 @@ public class CreateDecisionHandler : IRequestHandler<CreateDecisionCommand, Deci
         var decision = new Decision
         {
             UserId = userId,
-            Title = cmd.Title,
-            Description = cmd.Description,
-            ExpectedOutcome = cmd.ExpectedOutcome,
+            Title = cmd.Title.Trim(),
+            Description = cmd.Description.Trim(),
+            ExpectedOutcome = cmd.ExpectedOutcome.Trim(),
             Visibility = cmd.Visibility,
             CreatedAt = DateTime.UtcNow,
             ExpectedReflectionDate = cmd.ExpectedReflectionDate,
