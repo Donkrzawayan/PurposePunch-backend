@@ -41,6 +41,23 @@ public class GlobalExceptionHandler : IExceptionHandler
             return true;
         }
 
+        else if (exception is InvalidOperationException)
+        {
+            httpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
+
+            var badRequestProblemDetails = new ProblemDetails
+            {
+                Status = StatusCodes.Status400BadRequest,
+                Title = "Rule Violation",
+                Type = "https://tools.ietf.org/html/rfc9110#section-15.5.1",
+                Detail = exception.Message,
+                Instance = httpContext.Request.Path
+            };
+
+            await httpContext.Response.WriteAsJsonAsync(badRequestProblemDetails, cancellationToken);
+            return true;
+        }
+
         else if (exception is UnauthorizedAccessException)
         {
             httpContext.Response.StatusCode = StatusCodes.Status401Unauthorized;

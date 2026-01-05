@@ -1,6 +1,8 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using PurposePunch.Application.Common.Models;
+using PurposePunch.Application.DTOs;
 using PurposePunch.Application.Features.PublicPosts;
 
 namespace PurposePunch.Api.Controllers;
@@ -14,16 +16,19 @@ public class PublicPostsController : ControllerBase
     public PublicPostsController(IMediator mediator) => _mediator = mediator;
 
     [HttpGet]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     [AllowAnonymous]
-    public async Task<IActionResult> Get([FromQuery] GetPublicPostsQuery query)
+    public async Task<ActionResult<PagedResult<PublicPostDto>>> Get([FromQuery] GetPublicPostsQuery query)
     {
         var pagedResult = await _mediator.Send(query);
         return Ok(pagedResult);
     }
 
     [HttpGet("{id}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     [AllowAnonymous]
-    public async Task<IActionResult> GetById(int id)
+    public async Task<ActionResult<PublicPostDto>> GetById(int id)
     {
         var post = await _mediator.Send(new GetPublicPostByIdQuery(id));
 
@@ -34,6 +39,8 @@ public class PublicPostsController : ControllerBase
     }
 
     [HttpPost("{id}/upvote")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     [AllowAnonymous]
     public async Task<IActionResult> Upvote(int id)
     {

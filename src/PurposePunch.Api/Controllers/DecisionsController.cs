@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using PurposePunch.Application.DTOs;
 using PurposePunch.Application.Features.Decisions;
 
 namespace PurposePunch.Api.Controllers;
@@ -18,7 +19,9 @@ public class DecisionsController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetById(int id)
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<DecisionDto>> GetById(int id)
     {
         var query = new GetDecisionByIdQuery(id);
         var decision = await _mediator.Send(query);
@@ -30,7 +33,8 @@ public class DecisionsController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAll()
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<ActionResult<IEnumerable<DecisionDto>>> GetAll()
     {
         var query = new GetAllDecisionsQuery();
         var decisions = await _mediator.Send(query);
@@ -38,6 +42,8 @@ public class DecisionsController : ControllerBase
     }
 
     [HttpPost]
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Create([FromBody] CreateDecisionCommand command)
     {
         var addedDecision = await _mediator.Send(command);
@@ -45,6 +51,9 @@ public class DecisionsController : ControllerBase
     }
 
     [HttpPut("{id}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Update(int id, [FromBody] UpdateDecisionCommand command)
     {
         var commandWithId = command with { Id = id };
@@ -57,6 +66,8 @@ public class DecisionsController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Delete(int id)
     {
         var command = new DeleteDecisionCommand(id);
@@ -68,20 +79,16 @@ public class DecisionsController : ControllerBase
     }
 
     [HttpPost("{id}/publish")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Publish(int id)
     {
-        try
-        {
-            var postId = await _mediator.Send(new PublishDecisionCommand(id));
+        var postId = await _mediator.Send(new PublishDecisionCommand(id));
 
-            if (postId == null)
-                return NotFound();
+        if (postId == null)
+            return NotFound();
 
-            return Ok(new { PublicPostId = postId, Message = "Decision published successfully!" });
-        }
-        catch (InvalidOperationException ex)
-        {
-            return BadRequest(new { Error = ex.Message });
-        }
+        return Ok(new { PublicPostId = postId, Message = "Decision published successfully!" });
     }
 }

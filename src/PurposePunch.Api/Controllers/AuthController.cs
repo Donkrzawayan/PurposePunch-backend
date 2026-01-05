@@ -13,6 +13,8 @@ namespace PurposePunch.Api.Controllers
         public AuthController(IMediator mediator) => _mediator = mediator;
 
         [HttpPost("register")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Register(RegisterCommand command)
         {
             await _mediator.Send(command);
@@ -20,6 +22,8 @@ namespace PurposePunch.Api.Controllers
         }
 
         [HttpPost("login")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Login(LoginCommand command)
         {
             var token = await _mediator.Send(command);
